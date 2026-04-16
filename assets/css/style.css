@@ -1,0 +1,155 @@
+/* Page */
+
+body{
+background:#f4f7fb;
+font-family:'Segoe UI', sans-serif;
+margin:0;
+}
+
+/* Layout */
+
+.wrapper{
+display:flex;
+min-height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+width:230px;
+background:#0f766e;
+color:white;
+padding:25px 15px;
+position:fixed;
+height:100vh;
+left:0;
+top:0;
+}
+
+.logo{
+font-size:22px;
+font-weight:700;
+margin-bottom:30px;
+padding-left:10px;
+}
+
+.sidebar ul{
+list-style:none;
+padding:0;
+margin:0;
+}
+
+.sidebar ul li{
+margin:10px;
+}
+
+.sidebar ul li a{
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px 12px;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-size:15px;
+transition:0.2s;
+}
+
+.sidebar ul li a:hover{
+background:rgba(255,255,255,0.15);
+}
+
+/* Active menu */
+.sidebar ul li a.active{
+background:white;
+color:#0f766e;
+font-weight:600;
+}
+
+/* Main content */
+.main-content{
+margin-left:230px;
+padding:35px;
+background:#f4f7fb;
+min-height:100vh;
+}
+
+/* Top bar */
+
+.topbar{
+margin-bottom:25px;
+}
+
+/* Dashboard Cards */
+
+.dashboard-card{
+background:white;
+padding:25px;
+border-radius:14px;
+box-shadow:0 6px 15px rgba(0,0,0,0.06);
+text-align:center;
+transition:0.25s;
+}
+
+.dashboard-card:hover{
+transform:translateY(-4px);
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.dashboard-card h6{
+color:#64748b;
+font-weight:600;
+margin-bottom:8px;
+}
+
+.queue-number{
+font-size:36px;
+font-weight:700;
+color:#0f766e;
+}
+
+/* Buttons */
+
+.btn-call{
+background:#16a34a;
+border:none;
+padding:12px 22px;
+border-radius:10px;
+font-weight:600;
+color:white;
+}
+
+.btn-call:hover{
+background:#15803d;
+}
+
+.btn-display{
+background:#2563eb;
+border:none;
+padding:12px 22px;
+border-radius:10px;
+font-weight:600;
+color:white;
+}
+
+.btn-display:hover{
+background:#1d4ed8;
+}
+
+/* Table card */
+
+.table-card{
+background:white;
+padding:25px;
+border-radius:14px;
+box-shadow:0 6px 15px rgba(0,0,0,0.06);
+margin-top:30px;
+}
+
+/* Badge */
+
+.badge{
+padding:6px 10px;
+font-size:12px;
+border-radius:8px;
+}
