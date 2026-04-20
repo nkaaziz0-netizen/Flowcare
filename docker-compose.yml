@@ -13,6 +13,8 @@ services:
 
   db:
     image: mysql:8.0
+    volumes: 
+    - ./db_data:/var/lib/mysql
     container_name: flowcare_db
     restart: always
     environment:
