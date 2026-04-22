@@ -2,9 +2,10 @@
 session_start();
 include("../config/config.php");
 
-if(!isset($_SESSION['username'])){
-header("Location: login.php");
-exit();
+if (!isset($_SESSION['role']) || 
+   ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'doctor')) {
+    header("Location: ../login.php");
+    exit();
 }
 ?>
 
@@ -32,6 +33,8 @@ exit();
 
 <h3 class="logo">FlowCare</h3>
 
+<!navbar start >
+
 <ul class="nav flex-column">
 
 <li class="nav-item">
@@ -46,11 +49,29 @@ exit();
 </a>
 </li>
 
+<?php if($_SESSION['role'] == "admin"){ ?> <!-- admin to create user -->
+<li class="nav-item">
+<a class="nav-link text-white" href="../admin/create_user.php">
+<i class="bi bi-person-plus"></i> Create User
+</a>
+</li> 
+<?php } ?>
+
+<?php if($_SESSION['role'] == "admin"){ ?> <!-- admin logs -->
+<li class="nav-item">
+<a class="nav-link text-white" href="../admin/logs.php">
+<i class="bi bi-clock-history"></i> System Logs
+</a>
+</li>
+<?php } ?>
+
+<?php if($_SESSION['role'] == "doctor"){ ?> <!--doc sahaja boleh view -->
 <li class="nav-item">
 <a class="nav-link text-white" href="#">
 <i class="bi bi-people"></i> Patients
 </a>
 </li>
+<?php } ?>
 
 <li class="nav-item">
 <a class="nav-link text-white" href="../authentication/logout.php">
@@ -58,7 +79,7 @@ exit();
 </a>
 </li>
 
-</ul>
+</ul> <!--end of navbar -->
 
 </div>
 

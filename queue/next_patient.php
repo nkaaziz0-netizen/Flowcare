@@ -1,10 +1,10 @@
 <?php
-include("config.php");
+include("../config/config.php");
 
 session_start();
 
 if($_SESSION['role'] != "doctor"){
-header("Location: dashboard.php");
+header("Location: ../dashboard/dashboard.php");
 exit();
 }
 
@@ -24,7 +24,7 @@ $conn->query("UPDATE patients SET status='serving' WHERE id=$id");
 
 }
 
-header("Location: dashboard.php");
+header("Location: ../dashboard/dashboard.php");
 ?>
 
 <link rel="stylesheet" href="assets/css/style.css">
