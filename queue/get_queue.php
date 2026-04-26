@@ -4,16 +4,18 @@ include("../config/config.php");
 $response = [];
 
 // current serving patient
-$current = $conn->query("SELECT queue_number,name FROM patients 
-WHERE status='serving' LIMIT 1");
+$serving_query = $conn->query("
+    SELECT queue_number 
+    FROM patients 
+    WHERE status='serving' 
+    ORDER BY created_at ASC 
+    LIMIT 1
+");
 
-if($current->num_rows > 0){
-$row = $current->fetch_assoc();
-$response['serving'] = $row['queue_number'];
-$response['serving_name'] = $row['name'];
-}else{
-$response['serving'] = "-";
-$response['serving_name'] = "";
+$serving = "-";
+if($serving_query->num_rows > 0){
+    $row = $serving_query->fetch_assoc();
+    $serving = $row['queue_number'];
 }
 
 // previous (last done)
@@ -45,16 +47,30 @@ if($nextOne->num_rows > 0){
 }
 
 // waiting queue
-$waiting = $conn->query("SELECT queue_number FROM patients 
-WHERE status='waiting' ORDER BY created_at ASC LIMIT 5");
+$waiting_query = $conn->query("
+    SELECT queue_number 
+    FROM patients 
+    WHERE status='waiting' 
+    ORDER BY created_at ASC
+");
 
-$list = [];
-
-while($row = $waiting->fetch_assoc()){
-$list[] = $row['queue_number'];
+$waiting = [];
+while($row = $waiting_query->fetch_assoc()){
+    $waiting[] = $row['queue_number'];
 }
 
-$response['waiting'] = $list;
+// ✅ TOTAL PATIENTS (FIXED)
+$total_query = $conn->query("
+    SELECT COUNT(*) as total 
+    FROM patients 
+    WHERE status IN ('waiting','serving')
+");
+
+$total = 0;
+if($total_query->num_rows > 0){
+    $row = $total_query->fetch_assoc();
+    $total = $row['total'];
+}
 
 // calculate waiting time
 $countWaiting = $conn->query("SELECT COUNT(*) as total FROM patients WHERE status='waiting'");
@@ -66,8 +82,11 @@ $estimatedTime = $patientsAhead * 5; // 5 minutes per patient
 
 $response['estimated_wait'] = $estimatedTime;
 
-header('Content-Type: application/json');
+$response['serving'] = $serving;
+$response['waiting'] = $waiting;
+$response['total'] = $total;
 
+header('Content-Type: application/json');
 echo json_encode($response);
 ?>
 

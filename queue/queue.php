@@ -29,70 +29,113 @@ if($current->num_rows > 0){
 <style>
 
 body{
-background:#111;
-color:white;
-font-family:Arial;
+    background: #9ecae1;;
+    color:black;
+    font-family:Arial;
 }
 
 .title{
-font-size:50px;
-font-weight:bold;
+    font-size:48px;
+    font-weight:bold;
+    letter-spacing:2px;
 }
 
+/* LEFT PANEL */
 .serving-box{
-background:white;
-color:black;
-border-radius:20px;
-padding:40px;
+    background:white;
+    color:black;
+    border-radius:20px;
+    padding:30px;
 }
 
+/* BIG NUMBER */
 .serving-number{
-font-size:120px;
-font-weight:bold;
-color:red;
+    font-size:140px;
+    font-weight:bold;
+    color:red;
+    animation: pulse 1.5s infinite;
 }
 
-.waiting-title{
-font-size:35px;
-margin-top:40px;
+/* RIGHT PANEL */
+.queue-box{
+    background:white;
+    color:black;
+    border-radius:20px;
+    padding:30px;
 }
 
-.waiting-number{
-font-size:45px;
-font-weight:bold;
+/* NEXT ITEMS */
+.waiting-card{
+    background:#9ecae1;
+    border-radius:12px;
+    padding:15px;
+    font-size:28px;
+    font-weight:bold;
 }
 
+.previous-number{
+    font-size: 60px;
+    font-weight: bold;
+    color: blue;
+}
+
+/* animation */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
 </style>
 
 </head>
 
 <body>
 
-<div class="container text-center mt-5">
+<div class="container-fluid mt-4">
 
-<div class="title">FLOWCARE CLINIC QUEUE</div>
+    <div class="text-center title mb-4">
+        FLOWCARE CLINIC QUEUE
+    </div>
 
-<br><br>
+    <div class="row">
 
-<div class="serving-box">
+        <!-- LEFT: NOW SERVING -->
+        <div class="col-md-8">
+            <div class="serving-box text-center h-100">
 
-<h2>NOW SERVING</h2>
+                <div class="d-flex justify-content-center align-items-center gap-2">
+                    <h4 class="mb-0">NOW SERVING</h4>
+                    <span class="badge bg-success">LIVE</span>
+                </div>
 
-<div id="serving" class="serving-number">-</div>
+                <div id="serving" class="serving-number mt-3">-</div>
 
-<h2 id="serving_name"></h2>
+                    <div class="mt-2">
+                        <small class="text-muted">Previous</small>
+                        <div id="previousQueue" class="previous-number">-</div>
+                    </div>
 
-<h4 id="estimated_time" class="mt-3"></h4>
+                <h4 id="serving_name" class="mt-2"></h4>
 
-<h3 id="clock"></h3>
+                <h5 id="estimated_time" class="mt-2"></h5>
 
-</div>
+                <h3 id="clock" class="mt-3 text-muted"></h3>
 
-<div class="waiting-title">NEXT QUEUE</div>
+            </div>
+        </div>
 
-<div id="waiting_list" class="row justify-content-center mt-3"></div>
+        <!-- RIGHT: NEXT QUEUE -->
+        <div class="col-md-4">
+            <div class="queue-box text-center h-100">
 
-</div>
+                <h4 class="mb-4">UPCOMING</h4>
+
+                <div id="waiting_list" class="d-flex flex-column gap-3"></div>
+
+            </div>
+        </div>
+
+    </div>
 
 
 <script>
@@ -108,6 +151,7 @@ console.log(data); // helps debug
 // update current serving
 document.getElementById("serving").innerText = data.serving;
 document.getElementById("serving_name").innerText = data.serving_name;
+document.getElementById("previousQueue").innerText = data.previous;
 
 // update estimated time
 document.getElementById("estimated_time").innerText =
@@ -120,13 +164,9 @@ list.innerHTML = "";
 data.waiting.forEach(function(queue){
 
 let div = document.createElement("div");
-div.className = "col-md-2 waiting-number";
+div.className = "waiting-card text-center";
 
-div.innerHTML = `
-<div class="card p-3 text-dark text-center">
-${queue}
-</div>
-`;
+div.innerText = queue;
 
 list.appendChild(div);
 

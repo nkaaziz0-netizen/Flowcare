@@ -16,9 +16,7 @@ if (!isset($_SESSION['role']) ||
 <title>FlowCare Dashboard</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
 <link rel="stylesheet" href="../assets/css/style.css">
 
 </head>
@@ -65,10 +63,10 @@ if (!isset($_SESSION['role']) ||
 </li>
 <?php } ?>
 
-<?php if($_SESSION['role'] == "doctor"){ ?> <!--doc sahaja boleh view -->
+<?php if($_SESSION['role'] == "doctor"){ ?>
 <li class="nav-item">
-<a class="nav-link text-white" href="#">
-<i class="bi bi-people"></i> Patients
+<a class="nav-link text-white" href="../doctor/patient_logs.php">
+<i class="bi bi-journal-text"></i> Patient Logs
 </a>
 </li>
 <?php } ?>
@@ -105,14 +103,6 @@ if (!isset($_SESSION['role']) ||
 </li>
 <?php } ?>
 
-<?php if($_SESSION['role']=="admin"){ ?>
-<li class="nav-item">
-<a class="nav-link text-white" href="logs.php">  <!-- x buat lagi -->
-<i class="bi bi-clock-history"></i> System Logs
-</a>
-</li>
-<?php } ?>
-
 <li class="nav-item mt-3">
 <a class="nav-link text-white" href="../authentication/logout.php">
 <i class="bi bi-box-arrow-right"></i> Logout
@@ -137,81 +127,80 @@ if (!isset($_SESSION['role']) ||
 </div>
 
 
-
-
 <!-- DASHBOARD CARDS -->
 
 <div class="row g-4">
 
-<div class="col-md-3">
+    <!-- Previous -->
+    <div class="col-md-3">
+        <div class="dashboard-card text-center">
+            <h6>Previous</h6>
+            <div id="previous" class="queue-number">-</div>
+        </div>
+    </div>
 
-<div class="dashboard-card">
+    <!-- Now Serving -->
+    <div class="col-md-3">
+        <div class="dashboard-card text-center">
+            <h6>Now Serving</h6>
+            <div id="serving" class="queue-number">-</div>
+        </div>
+    </div>
 
-<h6>Now Serving</h6>
+    <!-- Next -->
+    <div class="col-md-3">
+        <div class="dashboard-card text-center">
+            <h6>Next</h6>
+            <div id="next" class="queue-number">-</div>
+        </div>
+    </div>
 
-<div id="serving" class="queue-number">-</div>
+    <!-- Total -->
+    <div class="col-md-3">
+        <div class="dashboard-card text-center">
+            <h6>Total Patients</h6>
+            <div id="total_patients" class="queue-number">0</div>
+        </div>
+    </div>
 
-</div>
+    <!-- Waiting -->
+    <div class="col-md-6">
+        <div class="dashboard-card text-center">
+            <h6>Waiting Patients</h6>
+            <div id="waiting_count" class="queue-number">0</div>
+        </div>
+    </div>
 
-</div>
-
-
-<div class="col-md-3">
-
-<div class="dashboard-card">
-
-<h6>Waiting Patients</h6>
-
-<div id="waiting_count" class="queue-number">0</div>
-
-</div>
-
-</div>
-
-
-<div class="col-md-3">
-
-<div class="dashboard-card">
-
-<h6>Estimated Time</h6>
-
-<div id="estimated_time" class="queue-number">0m</div>
-
-</div>
-
-</div>
-
-
-<div class="col-md-3">
-
-<div class="dashboard-card">
-
-<h6>Total Patients</h6>
-
-<div id="total_patients" class="queue-number">0</div>
-
-</div>
-
-</div>
+    <!-- Estimated Time -->
+    <div class="col-md-6">
+        <div class="dashboard-card text-center">
+            <h6>Estimated Time</h6>
+            <div id="estimated_time" class="queue-number">0m</div>
+        </div>
+    </div>
 
 </div>
 
 
 <!-- ACTION BUTTONS -->
 
-<div class="mt-4">
+<div class="mt-4 d-flex gap-3 flex-wrap">
 
-<?php if($_SESSION['role'] == "doctor"){ ?>
+    <?php if($_SESSION['role'] == "doctor"){ ?>
 
-<a href="../queue/next_patient.php" class="btn btn-success btn-lg me-3">
-<i class="bi bi-megaphone"></i> Call Next Patient
-</a>
+    <a href="../queue/next_patient.php" class="btn btn-success btn-lg">
+        <i class="bi bi-megaphone"></i> Call Next
+    </a>
 
-<?php } ?>
+    <a href="../queue/recall_patient.php" class="btn btn-warning btn-lg">
+        <i class="bi bi-arrow-counterclockwise"></i> Recall
+    </a>
 
-<a href="../queue/queue.php" class="btn btn-primary btn-lg">
-<i class="bi bi-tv"></i> View Queue Display
-</a>
+    <?php } ?>
+
+    <a href="../queue/queue.php" class="btn btn-primary btn-lg">
+        <i class="bi bi-tv"></i> Display
+    </a>
 
 </div>
 
@@ -219,9 +208,7 @@ if (!isset($_SESSION['role']) ||
 <!-- WAITING QUEUE TABLE -->
 
 <div class="table-card mt-5">
-
 <h5 class="mb-3">Waiting Queue</h5>
-
 <table class="table table-hover">
 
 <thead>
@@ -248,20 +235,22 @@ if (!isset($_SESSION['role']) ||
 
 <script>
 
+
+
 function loadQueue(){
 
 fetch("../queue/get_queue.php")
-
 .then(res => res.json())
-
 .then(data => {
 
 // update dashboard cards
 document.getElementById("serving").innerText = data.serving;
-
 document.getElementById("waiting_count").innerText = data.waiting.length;
-
 document.getElementById("estimated_time").innerText = data.estimated_wait + "m";
+document.getElementById("total_patients").innerText = data.total;
+document.getElementById("previous").innerText = data.previous;
+document.getElementById("next").innerText = data.next;
+
 
 // update queue table
 let table = document.getElementById("waiting_list");
@@ -273,19 +262,42 @@ data.waiting.forEach(function(queue){
 let row = `
 <tr>
 <td>${queue}</td>
-<td><span class="badge bg-warning text-dark">Waiting</span></td>
+<td>
+    <span class="badge bg-warning text-dark">Waiting</span>
+</td>
+<td>
+    <button class="btn btn-sm btn-primary" onclick="callPatient('${queue}')">
+        Call
+    </button>
+</td>
 </tr>
 `;
 
 table.innerHTML += row;
 
 });
-
 })
-
 .catch(error => console.log("Queue error:", error));
-
 }
+
+function callPatient(queueNumber){
+
+    fetch("../queue/call_specific.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "queue_number=" + queueNumber
+    })
+    .then(res => res.text())
+    .then(() => {
+        loadQueue(); // refresh instantly
+    })
+    .catch(err => console.log(err));
+}
+
+
+
 
 // load immediately
 loadQueue();

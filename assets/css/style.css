@@ -83,12 +83,10 @@ margin-bottom:25px;
 /* Dashboard Cards */
 
 .dashboard-card{
-background:white;
-padding:25px;
-border-radius:14px;
-box-shadow:0 6px 15px rgba(0,0,0,0.06);
-text-align:center;
-transition:0.25s;
+    border-radius: 16px;
+    padding: 20px;
+    background: #f8f9fa;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .dashboard-card:hover{

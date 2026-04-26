@@ -11,7 +11,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = $_POST['gender'];
 
     // Generate random queue number (example: A123)
-    $randomNumber = "A" . rand(100, 999);
+    $result = $conn->query("SELECT MAX(id) as max_id FROM patients");
+    $row = $result->fetch_assoc();
+
+    $next = $row['max_id'] + 1;
+    $queueNumber = "A" . str_pad($next, 3, "0", STR_PAD_LEFT);
 
     $sql = "INSERT INTO patients (nric, name, phone, gender, queue_number, status)
             VALUES ('$nric', '$name', '$phone', '$gender', '$randomNumber', 'waiting')";

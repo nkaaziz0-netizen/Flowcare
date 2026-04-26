@@ -28,17 +28,24 @@ if($next->num_rows > 0){
     ");
 
     if($current->num_rows > 0){
-        $row = $current->fetch_assoc();
-        $current_id = $row['id'];
+    $row = $current->fetch_assoc();
+    $current_id = $row['id'];
 
-        // move to done
-        $conn->query("
-            UPDATE patients 
-            SET status='done' 
-            WHERE id = $current_id
-        ");
-    }
+    // ✅ LOG patient before marking done
+    $conn->query("
+        INSERT INTO patient_logs (queue_number, action)
+        SELECT queue_number, 'served'
+        FROM patients
+        WHERE id = $current_id
+    ");
 
+    // move to done
+    $conn->query("
+        UPDATE patients 
+        SET status='done' 
+        WHERE id = $current_id
+    ");
+}
     // move next to serving
     $row = $next->fetch_assoc();
     $next_id = $row['id'];
