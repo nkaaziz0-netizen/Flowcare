@@ -16,6 +16,34 @@ $response['serving'] = "-";
 $response['serving_name'] = "";
 }
 
+// previous (last done)
+$prev = $conn->query("
+    SELECT queue_number FROM patients 
+    WHERE status='done' 
+    ORDER BY created_at DESC
+    LIMIT 1
+");
+
+if($prev->num_rows > 0){
+    $response['previous'] = $prev->fetch_assoc()['queue_number'];
+}else{
+    $response['previous'] = "-";
+}
+
+// next (first waiting)
+$nextOne = $conn->query("
+    SELECT queue_number FROM patients 
+    WHERE status='waiting' 
+    ORDER BY created_at ASC 
+    LIMIT 1
+");
+
+if($nextOne->num_rows > 0){
+    $response['next'] = $nextOne->fetch_assoc()['queue_number'];
+}else{
+    $response['next'] = "-";
+}
+
 // waiting queue
 $waiting = $conn->query("SELECT queue_number FROM patients 
 WHERE status='waiting' ORDER BY created_at ASC LIMIT 5");

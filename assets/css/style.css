@@ -153,3 +153,17 @@ padding:6px 10px;
 font-size:12px;
 border-radius:8px;
 }
+
+.serving-number{
+    font-size:100px;
+    font-weight:bold;
+    color:seagreen;
+    animation: pulse 1.5s infinite;
+    text-align:center;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
