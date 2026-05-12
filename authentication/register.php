@@ -17,14 +17,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $next = $row['max_id'] + 1;
     $queueNumber = "A" . str_pad($next, 3, "0", STR_PAD_LEFT);
 
-    $sql = "INSERT INTO patients (nric, name, phone, gender, queue_number, status)
-            VALUES ('$nric', '$name', '$phone', '$gender', '$randomNumber', 'waiting')";
+    // Queue Position
+    $getLastPosition = $conn->query("
+    SELECT MAX(queue_position) as last_pos 
+    FROM patients
+    ");
 
-    if ($conn->query($sql) === TRUE) {
-        $message = "Your Queue Number is: " . $randomNumber;
+
+     // Queue Position
+    $getLastPosition = $conn->query("
+    SELECT MAX(queue_position) as last_pos 
+    FROM patients
+    ");
+
+    if($stmt->execute()){
+        $message = "Your Queue Number is: " . $queueNumber;
     } else {
         $message = "Error: " . $conn->error;
     }
+
 }
 ?>
 
