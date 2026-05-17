@@ -99,8 +99,19 @@ body{
 
     <div class="row">
 
-        <!-- LEFT: NOW SERVING -->
-        <div class="col-md-8">
+        <!-- LEFT: Previous -->
+        <div class="col-md-3">
+            <div class="queue-box text-center h-100">
+
+            <h4 class="mb-4">PREVIOUS</h4>
+
+            <div id="previous_queue" class="queue-number">
+                </div>
+            </div>
+        </div>
+
+        <!-- Center: Now Serving -->
+        <div class="col-md-6">
             <div class="serving-box text-center h-100">
 
                 <div class="d-flex justify-content-center align-items-center gap-2">
@@ -109,11 +120,6 @@ body{
                 </div>
 
                 <div id="serving" class="serving-number mt-3">-</div>
-
-                    <div class="mt-2">
-                        <small class="text-muted">Previous</small>
-                        <div id="previousQueue" class="previous-number">-</div>
-                    </div>
 
                 <h4 id="serving_name" class="mt-2"></h4>
 
@@ -125,17 +131,17 @@ body{
         </div>
 
         <!-- RIGHT: NEXT QUEUE -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="queue-box text-center h-100">
 
                 <h4 class="mb-4">UPCOMING</h4>
 
                 <div id="waiting_list" class="d-flex flex-column gap-3"></div>
 
+                </div>
             </div>
-        </div>
 
-    </div>
+        </div>
 
 
 <script>
@@ -150,25 +156,28 @@ console.log(data); // helps debug
 
 // update current serving
 document.getElementById("serving").innerText = data.serving;
-document.getElementById("serving_name").innerText = data.serving_name;
-document.getElementById("previousQueue").innerText = data.previous;
 
 // update estimated time
-document.getElementById("estimated_time").innerText =
-"Estimated Wait: " + data.estimated_wait + " minutes";
+document.getElementById("estimated_time").innerText = "Estimated Wait: " + data.estimated_wait + " minutes";
+
+// update previous list
+document.getElementById("previous_queue").innerText = data.previous;
+
 
 // update waiting list
 let list = document.getElementById("waiting_list");
+
 list.innerHTML = "";
 
 data.waiting.forEach(function(queue){
 
-let div = document.createElement("div");
-div.className = "waiting-card text-center";
+    let div = document.createElement("div");
 
-div.innerText = queue;
+    div.className = "waiting-card text-center";
 
-list.appendChild(div);
+    div.innerText = queue;
+
+    list.appendChild(div);
 
 });
 

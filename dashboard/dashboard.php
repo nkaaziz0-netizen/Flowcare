@@ -205,37 +205,59 @@ if (!isset($_SESSION['role']) ||
 </div>
 
 
-<!-- WAITING QUEUE TABLE -->
+<!-- Waiting Queue Table -->
 
 <div class="table-card mt-5">
 <h5 class="mb-3">Waiting Queue</h5>
+
 <table class="table table-hover">
 
 <thead>
+    <tr>
+    <th>Queue Number</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+</thead>
 
-<tr>
-<th>Queue Number</th>
-<th>Status</th>
+    <tbody id="waiting_list"></tbody>
+
+</table>
+
+</div>
+
+<!-- Previous Queue Table -->
+
+<div class="table-card mt-5">
+<h5 class="mb-3">Passed Queue</h5>
+    <input type="text" id="previousSearch"
+           class="form-control mb-3"
+           placeholder="Search previous queue...">
+
+    <table class="table" id="previousTable">
+
+    <table class="table table-hover" id="previousTable">
+
+<thead>
+    <tr>
+    <th>Queue Number</th>
+    <th>Status</th>
+    <th>Action</th>
 </tr>
 
 </thead>
 
-<tbody id="waiting_list"></tbody>
+    <tbody id="passed_list"></tbody>
 
 </table>
 
 </div>
 
 </div>
-
 </div>
-
 </div>
-
 
 <script>
-
-
 
 function loadQueue(){
 
@@ -253,9 +275,9 @@ document.getElementById("next").innerText = data.next;
 
 
 // update queue table
-let table = document.getElementById("waiting_list");
+let queueTable = document.getElementById("waiting_list");
 
-table.innerHTML = "";
+queueTable.innerHTML = "";
 
 data.waiting.forEach(function(queue){
 
@@ -269,16 +291,52 @@ let row = `
     <button class="btn btn-sm btn-primary" onclick="callPatient('${queue}')">
         Call
     </button>
+
+     <button class="btn btn-sm btn-primary" onclick="passPatient('${queue}')">
+        Pass
+    </button>
 </td>
 </tr>
 `;
 
-table.innerHTML += row;
+queueTable.innerHTML += row;
+});
+
+// update passed table
+
+let passedTable = document.getElementById("passed_list");
+
+passedTable.innerHTML = "";
+
+if(data.passed){
+
+    data.passed.forEach(function(queue){
+
+let row = `
+<tr>
+<td>${queue}</td>
+
+<td>
+    <span class="badge bg-warning text-dark">Passed</span>
+</td>
+
+<td>
+    <button class="btn btn-sm btn-warning btn-lg" onclick="recallPatient('${queue}')">
+        Recall
+    </button>
+</td>
+</tr>
+`;
+
+passedTable.innerHTML += row;
 
 });
+}
+
 })
 .catch(error => console.log("Queue error:", error));
 }
+
 
 function callPatient(queueNumber){
 
@@ -297,6 +355,47 @@ function callPatient(queueNumber){
 }
 
 
+function recallPatient(queueNumber){
+
+    fetch("../queue/recall_patient.php", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type":
+            "application/x-www-form-urlencoded"
+        },
+
+        body: "queue_number=" + queueNumber
+
+    })
+    .then(res => res.text())
+    .then(() => {
+
+        loadQueue();
+
+    })
+    .catch(err => console.log(err));
+}
+
+// Search Passed Queue Table
+document.getElementById("previousSearch")
+.addEventListener("keyup", function() {
+
+    let value = this.value.toLowerCase();
+
+    let rows = document.querySelectorAll("#previousTable tbody tr");
+
+    rows.forEach(function(row){
+
+        row.style.display =
+            row.innerText.toLowerCase().includes(value)
+            ? ""
+            : "none";
+
+    });
+
+});
 
 
 // load immediately

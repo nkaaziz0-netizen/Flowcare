@@ -30,6 +30,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     FROM patients
     ");
 
+    // Get latest queue position
+    $rowPos = $getLastPosition->fetch_assoc();
+    $queuePosition = $rowPos['last_pos'] + 1;
+
+    // Insert patient data
+    $stmt = $conn->prepare("
+        INSERT INTO patients 
+        (nric, name, phone, gender, queue_number, queue_position)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ");
+
+    $stmt->bind_param(
+    "sssssi",
+    $nric,
+    $name,
+    $phone,
+    $gender,
+    $queueNumber,
+    $queuePosition
+    );
+
     if($stmt->execute()){
         $message = "Your Queue Number is: " . $queueNumber;
     } else {

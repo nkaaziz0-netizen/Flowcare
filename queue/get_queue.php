@@ -18,11 +18,11 @@ if($serving_query->num_rows > 0){
     $serving = $row['queue_number'];
 }
 
-// previous (last done)
+// previous (last passed)
 $prev = $conn->query("
     SELECT queue_number FROM patients 
-    WHERE status='done' 
-    ORDER BY created_at DESC
+    WHERE status='passed' 
+    ORDER BY id DESC
     LIMIT 1
 ");
 
@@ -59,6 +59,19 @@ while($row = $waiting_query->fetch_assoc()){
     $waiting[] = $row['queue_number'];
 }
 
+//passed queue
+$passed_query = $conn->query("
+    SELECT queue_number
+    FROM patients
+    WHERE status='passed'
+    ORDER BY queue_position ASC
+");
+
+$passed = [];
+while($row = $passed_query->fetch_assoc()){
+    $passed[] = $row['queue_number'];
+}
+
 // ✅ TOTAL PATIENTS (FIXED)
 $total_query = $conn->query("
     SELECT COUNT(*) as total 
@@ -83,6 +96,7 @@ $estimatedTime = $patientsAhead * 5; // 5 minutes per patient
 $response['estimated_wait'] = $estimatedTime;
 
 $response['serving'] = $serving;
+$response['passed'] = $passed;
 $response['waiting'] = $waiting;
 $response['total'] = $total;
 
