@@ -29,61 +29,132 @@ if($current->num_rows > 0){
 <style>
 
 body{
-    background: #9ecae1;;
+    background:#d9edf7;
     color:black;
-    font-family:Arial;
+    font-family:Arial, sans-serif;
+    overflow-x:hidden;
 }
 
+/* TITLE */
+
 .title{
-    font-size:48px;
-    font-weight:bold;
+    font-size:clamp(30px,5vw,70px);
+    font-weight:800;
     letter-spacing:2px;
 }
 
-/* LEFT PANEL */
-.serving-box{
-    background:white;
-    color:black;
-    border-radius:20px;
-    padding:30px;
-}
+/* MAIN PANELS */
 
-/* BIG NUMBER */
-.serving-number{
-    font-size:140px;
-    font-weight:bold;
-    color:red;
-    animation: pulse 1.5s infinite;
-}
-
-/* RIGHT PANEL */
+.serving-box,
 .queue-box{
     background:white;
     color:black;
-    border-radius:20px;
-    padding:30px;
+    border-radius:30px;
+    padding:25px;
+    height:100%;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
 }
 
-/* NEXT ITEMS */
+/* NOW SERVING */
+
+.serving-number{
+    font-size:clamp(70px,12vw,180px);
+    font-weight:600;
+    color:red;
+    animation:pulse 1.5s infinite;
+    line-height:1;
+}
+
+/* PANELS TITLE */
+
+.panel-title{
+    font-size:clamp(20px,2vw,35px);
+    font-weight:600;
+}
+
+/* QUEUE CARD */
+
 .waiting-card{
     background:#9ecae1;
-    border-radius:12px;
-    padding:15px;
-    font-size:28px;
-    font-weight:bold;
+    border-radius:20px;
+    padding:18px;
+    margin-bottom:15px;
+    text-align:center;
+    transition:0.3s;
 }
 
-.previous-number{
-    font-size: 60px;
-    font-weight: bold;
-    color: blue;
+.waiting-card:hover{
+    transform:translateY(-3px);
 }
 
-/* animation */
+/* QUEUE NUMBER */
+
+.waiting-card .number{
+    font-size:clamp(28px,4vw,55px);
+    font-weight:600;
+}
+
+/* PATIENT NAME */
+
+.waiting-card .name{
+    font-size:clamp(16px,2vw,28px);
+    text-transform:uppercase;
+    font-weight:500;
+    letter-spacing:0.5px;
+}
+
+/* CLOCK */
+
+#clock{
+    font-size:clamp(25px,3vw,50px);
+}
+
+/* ESTIMATED WAIT */
+
+#estimated_time{
+    font-size:clamp(18px,2vw,28px);
+}
+
+/* LIVE BADGE */
+
+.badge{
+    font-size:14px;
+    padding:8px 14px;
+    border-radius:20px;
+}
+
+/* ANIMATION */
+
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.03);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .title{
+        margin-bottom:25px;
+    }
+
+    .queue-box,
+    .serving-box{
+        margin-bottom:20px;
+        padding:20px;
+    }
+
 }
 </style>
 
@@ -97,13 +168,13 @@ body{
         FLOWCARE CLINIC QUEUE
     </div>
 
-    <div class="row">
+    <div class="row g-4">
 
         <!-- LEFT: Previous -->
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-6 col-12">
             <div class="queue-box text-center h-100">
 
-            <h4 class="mb-4">PREVIOUS</h4>
+            <h4 class="panel-tittle mb-4">PREVIOUS</h4>
 
             <div id="previous_queue" class="queue-list"></div>
             <h4 id="serving_name" class="mt-2"></h4>
@@ -112,7 +183,7 @@ body{
         </div>
 
         <!-- Center: Now Serving -->
-        <div class="col-md-6">
+        <div class="col-lg-6 col-md-12 col-12">
             <div class="serving-box text-center h-100">
 
                 <div class="d-flex justify-content-center align-items-center gap-2">
@@ -193,8 +264,8 @@ data.waiting.slice(0,4).forEach(function(queue){
     div.className = "waiting-card";
 
     div.innerHTML = `
-        ${queue.queue_number}<br>
-        <small>${queue.name}</small>`;
+        <div class="number">${queue.queue_number}</div>
+        <div class="name">${queue.name}</div>`;
 
     list.appendChild(div);
 

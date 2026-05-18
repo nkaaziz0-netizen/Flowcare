@@ -71,6 +71,14 @@ if (!isset($_SESSION['role']) ||
 </li>
 <?php } ?>
 
+<?php if($_SESSION['role'] == "doctor"){ ?>
+<li class="nav-item">
+<a class="nav-link text-white" href="../doctor/patients.php">
+<i class="bi bi-people"></i> Patients
+</a>
+</li>
+<?php } ?>
+
 <li class="nav-item">
 <a class="nav-link text-white" href="../authentication/logout.php">
 <i class="bi bi-box-arrow-right"></i> Logout
@@ -226,7 +234,7 @@ if (!isset($_SESSION['role']) ||
 <!-- Previous Queue Table -->
 
 <div class="table-card mt-5">
-<h5 class="mb-3">Passed Queue</h5>
+    <h5 class="mb-3">Passed Queue</h5>
     <input type="text" id="previousSearch"
            class="form-control mb-3"
            placeholder="Search previous queue...">

@@ -229,13 +229,10 @@ body{
     </div>
 
     <div class="top-actions">
-
         <!-- BACK BUTTON -->
         <a href="../dashboard/dashboard.php" class="custom-btn">
             ← Back
         </a>
-
-
     </div>
 
 </div>
