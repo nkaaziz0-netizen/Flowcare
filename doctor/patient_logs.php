@@ -235,10 +235,6 @@ body{
             ← Back
         </a>
 
-        <!-- FILTER -->
-        <div class="custom-btn">
-            📅 All Time
-        </div>
 
     </div>
 

@@ -19,22 +19,28 @@ if($serving_query->num_rows > 0){
 }
 
 // previous (last passed)
-$prev = $conn->query("
-    SELECT queue_number FROM patients 
-    WHERE status='passed' 
+$prev_query = $conn->query("
+    SELECT queue_number, name
+    FROM patients
+    WHERE status='passed'
     ORDER BY id DESC
-    LIMIT 1
+    LIMIT 4
 ");
 
-if($prev->num_rows > 0){
-    $response['previous'] = $prev->fetch_assoc()['queue_number'];
-}else{
-    $response['previous'] = "-";
+$previous = [];
+
+while($row = $prev_query->fetch_assoc()){
+
+    $previous[] = [
+        "queue_number" => $row['queue_number'],
+        "name" => $row['name']
+    ];
 }
 
 // next (first waiting)
 $nextOne = $conn->query("
-    SELECT queue_number FROM patients 
+    SELECT queue_number 
+    FROM patients 
     WHERE status='waiting' 
     ORDER BY created_at ASC 
     LIMIT 1
@@ -48,20 +54,25 @@ if($nextOne->num_rows > 0){
 
 // waiting queue
 $waiting_query = $conn->query("
-    SELECT queue_number 
+    SELECT queue_number, name
     FROM patients 
     WHERE status='waiting' 
     ORDER BY created_at ASC
 ");
 
 $waiting = [];
+
 while($row = $waiting_query->fetch_assoc()){
-    $waiting[] = $row['queue_number'];
+
+    $waiting[] = [
+        "queue_number" => $row['queue_number'],
+        "name" => $row['name']
+    ];
 }
 
 //passed queue
 $passed_query = $conn->query("
-    SELECT queue_number
+    SELECT queue_number, name
     FROM patients
     WHERE status='passed'
     ORDER BY queue_position ASC
@@ -69,7 +80,10 @@ $passed_query = $conn->query("
 
 $passed = [];
 while($row = $passed_query->fetch_assoc()){
-    $passed[] = $row['queue_number'];
+    $passed[] = [
+        "queue_number" => $row['queue_number'],
+        "name" => $row['name']
+    ];
 }
 
 // ✅ TOTAL PATIENTS (FIXED)
@@ -99,6 +113,7 @@ $response['serving'] = $serving;
 $response['passed'] = $passed;
 $response['waiting'] = $waiting;
 $response['total'] = $total;
+$response['previous'] = $previous;
 
 header('Content-Type: application/json');
 echo json_encode($response);

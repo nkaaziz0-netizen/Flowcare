@@ -105,8 +105,9 @@ body{
 
             <h4 class="mb-4">PREVIOUS</h4>
 
-            <div id="previous_queue" class="queue-number">
-                </div>
+            <div id="previous_queue" class="queue-list"></div>
+            <h4 id="serving_name" class="mt-2"></h4>
+
             </div>
         </div>
 
@@ -136,7 +137,8 @@ body{
 
                 <h4 class="mb-4">UPCOMING</h4>
 
-                <div id="waiting_list" class="d-flex flex-column gap-3"></div>
+                <div id="waiting_list" class="queue-list"></div>
+                <h4 id="serving_name" class="mt-2"></h4>
 
                 </div>
             </div>
@@ -161,21 +163,38 @@ document.getElementById("serving").innerText = data.serving;
 document.getElementById("estimated_time").innerText = "Estimated Wait: " + data.estimated_wait + " minutes";
 
 // update previous list
-document.getElementById("previous_queue").innerText = data.previous;
+let previous = document.getElementById("previous_queue");
+previous.innerHTML = "";
 
+data.previous.slice(0,4).forEach(function(queue){
+
+    let div = document.createElement("div");
+
+    div.className = "waiting-card";
+
+    div.innerHTML = `
+        <div class="number">${queue.queue_number}</div>
+        <div class="name">${queue.name}</div>
+    `;
+
+    previous.appendChild(div);
+
+});
 
 // update waiting list
 let list = document.getElementById("waiting_list");
 
 list.innerHTML = "";
 
-data.waiting.forEach(function(queue){
+data.waiting.slice(0,4).forEach(function(queue){
 
     let div = document.createElement("div");
 
-    div.className = "waiting-card text-center";
+    div.className = "waiting-card";
 
-    div.innerText = queue;
+    div.innerHTML = `
+        ${queue.queue_number}<br>
+        <small>${queue.name}</small>`;
 
     list.appendChild(div);
 

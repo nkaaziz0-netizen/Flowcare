@@ -135,7 +135,7 @@ if (!isset($_SESSION['role']) ||
     <div class="col-md-3">
         <div class="dashboard-card text-center">
             <h6>Previous</h6>
-            <div id="previous" class="queue-number">-</div>
+            <div id="previous" class="queue-number"></div>
         </div>
     </div>
 
@@ -188,19 +188,15 @@ if (!isset($_SESSION['role']) ||
 
     <?php if($_SESSION['role'] == "doctor"){ ?>
 
-    <a href="../queue/next_patient.php" class="btn btn-success btn-lg">
-        <i class="bi bi-megaphone"></i> Call Next
+    <a href="../queue/next_patient.php" class="btn btn-success"> Call Next
     </a>
 
-    <a href="../queue/recall_patient.php" class="btn btn-warning btn-lg">
-        <i class="bi bi-arrow-counterclockwise"></i> Recall
+
+   <a href="../queue/reset_queue.php" onclick="return confirm('Reset all queue data?')">
+   <button class="btn btn-danger"> Reset Queue </button>
     </a>
 
     <?php } ?>
-
-    <a href="../queue/queue.php" class="btn btn-primary btn-lg">
-        <i class="bi bi-tv"></i> Display
-    </a>
 
 </div>
 
@@ -215,6 +211,7 @@ if (!isset($_SESSION['role']) ||
 <thead>
     <tr>
     <th>Queue Number</th>
+    <th>Patient Name</th>
     <th>Status</th>
     <th>Action</th>
 </tr>
@@ -241,6 +238,7 @@ if (!isset($_SESSION['role']) ||
 <thead>
     <tr>
     <th>Queue Number</th>
+    <th>Patient Name</th>
     <th>Status</th>
     <th>Action</th>
 </tr>
@@ -270,7 +268,6 @@ document.getElementById("serving").innerText = data.serving;
 document.getElementById("waiting_count").innerText = data.waiting.length;
 document.getElementById("estimated_time").innerText = data.estimated_wait + "m";
 document.getElementById("total_patients").innerText = data.total;
-document.getElementById("previous").innerText = data.previous;
 document.getElementById("next").innerText = data.next;
 
 
@@ -283,21 +280,32 @@ data.waiting.forEach(function(queue){
 
 let row = `
 <tr>
-<td>${queue}</td>
-<td>
-    <span class="badge bg-warning text-dark">Waiting</span>
-</td>
-<td>
-    <button class="btn btn-sm btn-primary" onclick="callPatient('${queue}')">
-        Call
-    </button>
+<td>${queue.queue_number}</td>
+<td>${queue.name}</td>
 
-     <button class="btn btn-sm btn-primary" onclick="passPatient('${queue}')">
-        Pass
+<td>
+    <span class="badge bg-warning text-dark">
+        Waiting
+    </span>
+</td>
+
+<td>
+    <button class="btn btn-sm btn-primary"
+        onclick="callPatient('${queue.queue_number}')">
+        Call
     </button>
 </td>
 </tr>
 `;
+
+let previousText = "-"; //passed bar
+
+if(data.previous.length > 0){
+    previousText = data.previous[0].queue_number;
+}
+
+document.getElementById("previous").innerText = previousText;
+
 
 queueTable.innerHTML += row;
 });
@@ -314,7 +322,8 @@ if(data.passed){
 
 let row = `
 <tr>
-<td>${queue}</td>
+<td>${queue.queue_number}</td>
+<td>${queue.name}</td>
 
 <td>
     <span class="badge bg-warning text-dark">Passed</span>

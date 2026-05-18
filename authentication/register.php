@@ -37,9 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Insert patient data
     $stmt = $conn->prepare("
         INSERT INTO patients 
-        (nric, name, phone, gender, queue_number, queue_position)
-        VALUES (?, ?, ?, ?, ?, ?)
-        ");
+        (nric, name, phone, gender, queue_number, status, queue_position)
+        VALUES (?, ?, ?, ?, ?, 'waiting', ?) ");
 
     $stmt->bind_param(
     "sssssi",

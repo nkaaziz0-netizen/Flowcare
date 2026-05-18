@@ -2,8 +2,8 @@
 
 function sendTelegram($phone, $message)
 {
-    $botToken = "bot_TOKEN";
-    $chatId = "ID_CHAT";
+    $botToken = "8499160571:AAEORnv-uJn5_bxzBk9ZbBx0UZyCpK4I9Lo";
+    $chatId = "909312713";
 
   $url = "https://api.telegram.org/bot".$botToken."/sendMessage";
 
