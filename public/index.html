@@ -146,7 +146,17 @@ document.addEventListener("DOMContentLoaded", function(){
         .then(res => res.json())
         .then(data => {
             document.getElementById("serving").innerText = data.serving;
-            document.getElementById("prevQueue").innerText = data.previous;
+            
+            if(data.previous && data.previous.length > 0){
+
+            document.getElementById("prevQueue").innerText =
+                data.previous.map(q => q.queue_number).join(", ");
+
+        } else {
+
+            document.getElementById("prevQueue").innerText = "-";
+        }
+
             document.getElementById("nextQueue").innerText = data.next;
         })
         .catch(err => console.log("Queue error:", err));
