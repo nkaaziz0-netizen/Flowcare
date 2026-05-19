@@ -52,75 +52,169 @@ $message="Invalid Login";
 <link rel="stylesheet" href="../assets/css/style.css">
 
 <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
 body{
-height:100vh;
-font-family:'Segoe UI', sans-serif;
-background:#f3f4f6;
+    display:flex;
+    min-height:100vh;
+    font-family:'Segoe UI', sans-serif;
+    background:#f3f4f6;
 }
 
+/* LEFT SIDE */
 .left-panel{
-background:#f8fafc;
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+    background:#f8fafc;
 }
 
+/* LOGIN CARD */
 .login-card{
-background:white;
-padding:40px;
-border-radius:20px;
-box-shadow:0 15px 35px rgba(0,0,0,0.1);
-width:100%;
-max-width:420px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.1);
+    width:100%;
+    max-width:420px;
 }
 
+/* LOGO */
 .logo{
-font-size:34px;
-font-weight:700;
-color:#14b8a6;
+    font-size:34px;
+    font-weight:700;
+    color:#14b8a6;
+    margin-bottom:10px;
 }
 
 .welcome{
-font-size:28px;
-font-weight:600;
+    font-size:28px;
+    font-weight:600;
+    margin-bottom:30px;
 }
 
+/* INPUT */
 .form-control{
-border-radius:10px;
-padding:12px;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:20px;
 }
 
+/* BUTTON */
 .btn-login{
-background:#14b8a6;
-border:none;
-border-radius:10px;
-padding:12px;
-font-weight:600;
+    background:#14b8a6;
+    border:none;
+    border-radius:10px;
+    padding:12px;
+    font-weight:600;
+    width:100%;
+    color:white;
+    transition:0.3s;
 }
 
 .btn-login:hover{
-background:#0f766e;
+    background:#0f766e;
 }
 
+/* RIGHT SIDE */
 .right-panel{
-background:linear-gradient(135deg,#0f766e,#14b8a6);
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
+    flex:1;
+    background:url('/assets/img/bg.jpg') center center/cover no-repeat;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px;
+    text-align:center;
 }
 
+
+/* CONTENT */
 .content-box{
-max-width:450px;
+    width:100%;
+    max-width:500px;
 }
 
 .right-title{
-font-size:42px;
-font-weight:bold;
-margin-bottom:20px;
+    font-size:48px;
+    font-weight:bold;
+    margin-bottom:20px;
 }
 
 .right-desc{
-font-size:18px;
-opacity:0.9;
+    font-size:20px;
+    opacity:0.9;
+    line-height:1.6;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media(max-width:992px){
+
+    body{
+        flex-direction:column;
+    }
+
+    .left-panel,
+    .right-panel{
+        width:100%;
+        min-height:50vh;
+    }
+
+    .right-title{
+        font-size:36px;
+    }
+
+    .right-desc{
+        font-size:18px;
+    }
+}
+
+.logo-img{
+    max-width:100%;
+    height:auto;
+    display:block;
+    margin:0 auto 20px;
+    object-fit:contain;
+}
+
+@media(max-width:576px){
+
+    .login-card{
+        padding:25px;
+        border-radius:15px;
+        overflow:hidden;
+    }
+
+    .logo{
+        font-size:28px;
+    }
+
+    .welcome{
+        font-size:24px;
+    }
+
+    .right-title{
+        font-size:28px;
+    }
+
+    .right-desc{
+        font-size:16px;
+    }
+
+    .left-panel,
+    .right-panel{
+        padding:20px;
+    }
+
+    
 }
 
 </style>
@@ -137,7 +231,7 @@ opacity:0.9;
 
 <div class="login-card">
 
-<div class="logo mb-3">FlowCare</div>
+<img src="../assets/img/Fl2.png" class="logo-img">
 <div class="welcome mb-4">Welcome Back 👋</div>
 
 <?php if($message!=""){ ?>

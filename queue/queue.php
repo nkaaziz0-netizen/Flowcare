@@ -29,8 +29,8 @@ if($current->num_rows > 0){
 <style>
 
 body{
-    background:#d9edf7;
-    color:black;
+    background:#f7f5f0;
+    color:#2d3748;
     font-family:Arial, sans-serif;
     overflow-x:hidden;
 }
@@ -75,7 +75,7 @@ body{
 /* QUEUE CARD */
 
 .waiting-card{
-    background:#9ecae1;
+    background:#e2eff0;
     border-radius:20px;
     padding:18px;
     margin-bottom:15px;
@@ -123,6 +123,20 @@ body{
     border-radius:20px;
 }
 
+.logo-wrapper{
+    text-align:center;
+    margin-bottom:0;
+    padding-bottom:0;
+}
+
+.queue-logo{
+    text-align:center;
+    width:40%;
+    height:auto;
+    display:inline-block;
+    margin:0;
+}
+
 /* ANIMATION */
 
 @keyframes pulse {
@@ -141,37 +155,50 @@ body{
 
 }
 
+
 /* MOBILE */
 
 @media(max-width:768px){
 
-    .title{
-        margin-bottom:25px;
+    .waiting-card{
+        padding:10px;
+        border-radius:12px;
     }
 
-    .queue-box,
-    .serving-box{
-        margin-bottom:20px;
-        padding:20px;
+    .waiting-card .number{
+        font-size:28px;
+    }
+
+    .waiting-card .name{
+        font-size:12px;
+    }
+
+    .serving-number{
+        font-size:55px;
+    }
+
+    #clock{
+        font-size:18px;
     }
 
 }
+
 </style>
 
 </head>
 
 <body>
 
-<div class="container-fluid mt-4">
-
-    <div class="text-center title mb-4">
-        FLOWCARE CLINIC QUEUE
+    <div class="logo-wrapper">
+        <img src="../assets/img/Fl2.png"
+            alt="FlowCare"
+            class="queue-logo">
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4 mt-0">
 
         <!-- LEFT: Previous -->
-        <div class="col-lg-3 col-md-6 col-12">
+        <div class="col-lg-3 col-md-4 col-4">
             <div class="queue-box text-center h-100">
 
             <h4 class="panel-tittle mb-4">PREVIOUS</h4>
@@ -183,7 +210,7 @@ body{
         </div>
 
         <!-- Center: Now Serving -->
-        <div class="col-lg-6 col-md-12 col-12">
+        <div class="col-lg-6 col-md-4 col-4">
             <div class="serving-box text-center h-100">
 
                 <div class="d-flex justify-content-center align-items-center gap-2">
@@ -203,8 +230,8 @@ body{
         </div>
 
         <!-- RIGHT: NEXT QUEUE -->
-        <div class="col-md-3">
-            <div class="queue-box text-center h-100">
+        <div class="col-lg-3 col-md-4 col-4">
+                <div class="queue-box text-center h-100">
 
                 <h4 class="mb-4">UPCOMING</h4>
 

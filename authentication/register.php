@@ -117,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form method="POST">
         <div class="mb-3">
             <label class="form-label">NRIC</label>
-            <input type="text" name="nric" id="nric" class="form-control" maxlength="14" placeholder="000001-01-1234" required>
+            <input type="text" name="nric" id="nric" class="form-control" maxlength="14" placeholder="0000XX-XX-XXXX" required>
         </div>
 
         <div class="mb-3">
