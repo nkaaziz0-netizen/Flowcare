@@ -1,35 +1,40 @@
 <?php
+session_start();
+
 include("../config/config.php");
-
-// log previous serving
-$conn->query("
-    INSERT INTO patient_logs (queue_number, action)
-    SELECT queue_number, 'served' 
-    FROM patients 
-    WHERE status='serving'
-");
-
-// log manual call
-$conn->query("
-    INSERT INTO patient_logs (queue_number, action)
-    VALUES ('$queue', 'manual_call')
-");
 
 if(isset($_POST['queue_number'])){
 
     $queue = $_POST['queue_number'];
 
-    // 1. Move current serving to done
+    // log previous serving
+    $conn->query("
+        INSERT INTO patient_logs (queue_number, action)
+        SELECT queue_number, 'served' 
+        FROM patients 
+        WHERE status='serving'
+    ");
+
+    // log manual call
+    $conn->query("
+        INSERT INTO patient_logs (queue_number, action)
+        VALUES ('$queue', 'manual_call')
+    ");
+
+    // move current serving to done
     $conn->query("
         UPDATE patients 
         SET status='done' 
         WHERE status='serving'
     ");
 
-    // 2. Set selected patient to serving
+    // set selected patient to serving
+    $doctor_id = $_SESSION['user_id'];
+
     $conn->query("
-        UPDATE patients 
-        SET status='serving' 
+        UPDATE patients
+        SET status='serving',
+            called_by='$doctor_id'
         WHERE queue_number='$queue'
     ");
 }

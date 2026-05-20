@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $nric   = $_POST['nric'];
     $name   = $_POST['name'];
+    $nickname = $_POST['nickname'];
     $phone  = $_POST['phone'];
     $gender = $_POST['gender'];
 
@@ -62,13 +63,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(empty($error)){
     $stmt = $conn->prepare("
         INSERT INTO patients 
-        (nric, name, phone, gender, queue_number, status, queue_position)
-        VALUES (?, ?, ?, ?, ?, 'waiting', ?) ");
+        (nric, name, nickname, phone, gender, queue_number, status, queue_position)
+        VALUES (?, ?, ?, ?, ?, ?, 'waiting', ?) ");
 
     $stmt->bind_param(
-    "sssssi",
+    "ssssssi",
     $nric,
     $name,
+    $nickname,
     $phone,
     $gender,
     $queueNumber,
@@ -123,6 +125,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="mb-3">
             <label class="form-label">Full Name</label>
             <input type="text" name="name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Nickname</label>
+            <input type="text" name="nickname" class="form-control" placeholder="Name refer to be shown on screen"  required>
         </div>
 
         <div class="mb-3">

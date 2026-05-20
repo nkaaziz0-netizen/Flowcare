@@ -26,7 +26,7 @@ if($serving_query->num_rows > 0){
 
 // previous (last passed)
 $prev_query = $conn->query("
-    SELECT patients.queue_number, users.location
+    SELECT patients.queue_number, patients.nickname, users.location
     FROM patients
     LEFT JOIN users ON patients.called_by = users.id
     WHERE patients.status='passed'
@@ -40,13 +40,14 @@ while($row = $prev_query->fetch_assoc()){
 
     $previous[] = [
         "queue_number" => $row['queue_number'],
+        "nickname" => $row['nickname'],
         "location" => $row['location']
     ];
 }
 
 // next (first waiting)
 $nextOne = $conn->query("
-    SELECT queue_number 
+    SELECT queue_number, nickname
     FROM patients 
     WHERE status='waiting' 
     ORDER BY created_at ASC 
@@ -61,7 +62,7 @@ if($nextOne->num_rows > 0){
 
 // waiting queue
 $waiting_query = $conn->query("
-    SELECT queue_number, name
+    SELECT queue_number, nickname
     FROM patients 
     WHERE status='waiting' 
     ORDER BY created_at ASC
@@ -73,7 +74,7 @@ while($row = $waiting_query->fetch_assoc()){
 
     $waiting[] = [
         "queue_number" => $row['queue_number'],
-        "name" => $row['name']
+        "nickname" => $row['nickname']
     ];
 }
 
@@ -93,7 +94,7 @@ while($row = $passed_query->fetch_assoc()){
     ];
 }
 
-// ✅ TOTAL PATIENTS (FIXED)
+// TOTAL PATIENTS (FIXED)
 $total_query = $conn->query("
     SELECT COUNT(*) as total 
     FROM patients 

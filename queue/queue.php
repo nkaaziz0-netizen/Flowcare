@@ -271,6 +271,7 @@ data.previous.slice(0,4).forEach(function(queue){
 
     div.innerHTML = `
         <div class="number">${queue.queue_number}</div>
+        <div class="name">${queue.nickname}</div>
         <div class="room">${queue.location}</div>
     `;
 
@@ -291,6 +292,7 @@ data.waiting.slice(0,4).forEach(function(queue){
 
     div.innerHTML = `
         <div class="number">${queue.queue_number}</div>
+        <div class="name">${queue.nickname}</div>
     `;
     list.appendChild(div);
 
