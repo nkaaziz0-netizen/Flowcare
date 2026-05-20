@@ -248,11 +248,18 @@ body{
         </a>
     </div>
 
-</div>
+    </div>
 
-<div class="table-wrapper">
+    <div class="mb-3">
+    <input type="text" 
+           id="searchInput" 
+           class="form-control"
+           placeholder="Search queue number or action...">
+    </div>
 
-<table class="table custom-table">
+    <div class="table-wrapper">
+
+    <table class="table custom-table">
 
     <thead>
         <tr>
@@ -317,6 +324,28 @@ body{
 
     <?php } ?>
 
+
+    <script>
+    document.getElementById("searchInput").addEventListener("keyup", function(){
+
+    let value = this.value.toLowerCase();
+
+    let rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(function(row){
+
+        let text = row.innerText.toLowerCase();
+
+        if(text.includes(value)){
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+
+    });
+
+});
+</script>
     </tbody>
 
 </table>
