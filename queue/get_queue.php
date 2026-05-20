@@ -62,7 +62,7 @@ if($nextOne->num_rows > 0){
 
 // waiting queue
 $waiting_query = $conn->query("
-    SELECT queue_number, nickname
+    SELECT queue_number, name, nickname
     FROM patients 
     WHERE status='waiting' 
     ORDER BY created_at ASC
@@ -74,6 +74,7 @@ while($row = $waiting_query->fetch_assoc()){
 
     $waiting[] = [
         "queue_number" => $row['queue_number'],
+        "name"=> $row['name'],
         "nickname" => $row['nickname']
     ];
 }
