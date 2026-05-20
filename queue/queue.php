@@ -94,13 +94,11 @@ body{
     font-weight:600;
 }
 
-/* PATIENT NAME */
-
-.waiting-card .name{
-    font-size:clamp(16px,2vw,28px);
-    text-transform:uppercase;
+.waiting-card .room{
+    font-size:16px;
+    color:#555;
+    margin-top:5px;
     font-weight:500;
-    letter-spacing:0.5px;
 }
 
 /* CLOCK */
@@ -204,7 +202,6 @@ body{
             <h4 class="panel-tittle mb-4">PREVIOUS</h4>
 
             <div id="previous_queue" class="queue-list"></div>
-            <h4 id="serving_name" class="mt-2"></h4>
 
             </div>
         </div>
@@ -220,7 +217,7 @@ body{
 
                 <div id="serving" class="serving-number mt-3">-</div>
 
-                <h4 id="serving_name" class="mt-2"></h4>
+                <h3 id="location" class="mt-3 text-primary fw-bold"></h3>
 
                 <h5 id="estimated_time" class="mt-2"></h5>
 
@@ -236,7 +233,6 @@ body{
                 <h4 class="mb-4">UPCOMING</h4>
 
                 <div id="waiting_list" class="queue-list"></div>
-                <h4 id="serving_name" class="mt-2"></h4>
 
                 </div>
             </div>
@@ -257,6 +253,9 @@ console.log(data); // helps debug
 // update current serving
 document.getElementById("serving").innerText = data.serving;
 
+// update current location
+document.getElementById("location").innerText = data.location;
+
 // update estimated time
 document.getElementById("estimated_time").innerText = "Estimated Wait: " + data.estimated_wait + " minutes";
 
@@ -272,7 +271,7 @@ data.previous.slice(0,4).forEach(function(queue){
 
     div.innerHTML = `
         <div class="number">${queue.queue_number}</div>
-        <div class="name">${queue.name}</div>
+        <div class="room">${queue.location}</div>
     `;
 
     previous.appendChild(div);
@@ -292,8 +291,7 @@ data.waiting.slice(0,4).forEach(function(queue){
 
     div.innerHTML = `
         <div class="number">${queue.queue_number}</div>
-        <div class="name">${queue.name}</div>`;
-
+    `;
     list.appendChild(div);
 
 });

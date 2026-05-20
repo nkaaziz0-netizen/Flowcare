@@ -5,25 +5,32 @@ $response = [];
 
 // current serving patient
 $serving_query = $conn->query("
-    SELECT queue_number 
-    FROM patients 
-    WHERE status='serving' 
-    ORDER BY created_at ASC 
+    SELECT patients.queue_number, users.location
+    FROM patients
+    LEFT JOIN users ON patients.called_by = users.id
+    WHERE patients.status='serving'
+    ORDER BY patients.created_at ASC
     LIMIT 1
 ");
 
 $serving = "-";
+$location = "-";
+
 if($serving_query->num_rows > 0){
+
     $row = $serving_query->fetch_assoc();
+
     $serving = $row['queue_number'];
+    $location = $row['location'];
 }
 
 // previous (last passed)
 $prev_query = $conn->query("
-    SELECT queue_number, name
+    SELECT patients.queue_number, users.location
     FROM patients
-    WHERE status='passed'
-    ORDER BY id DESC
+    LEFT JOIN users ON patients.called_by = users.id
+    WHERE patients.status='passed'
+    ORDER BY patients.id DESC
     LIMIT 4
 ");
 
@@ -33,7 +40,7 @@ while($row = $prev_query->fetch_assoc()){
 
     $previous[] = [
         "queue_number" => $row['queue_number'],
-        "name" => $row['name']
+        "location" => $row['location']
     ];
 }
 
@@ -110,6 +117,7 @@ $estimatedTime = $patientsAhead * 5; // 5 minutes per patient
 $response['estimated_wait'] = $estimatedTime;
 
 $response['serving'] = $serving;
+$response['location'] = $location;
 $response['passed'] = $passed;
 $response['waiting'] = $waiting;
 $response['total'] = $total;

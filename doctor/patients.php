@@ -9,7 +9,7 @@ header("Expires: 0");
 
 /* CHECK LOGIN */
 if(!isset($_SESSION['user_id'])){
-    header("Location: ../authentication/login.php");
+    header("Location: ../authentication/login.php?error=loginfirst");
     exit();
 }
 

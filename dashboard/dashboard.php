@@ -352,11 +352,11 @@ let row = `
 <td>${queue.name}</td>
 
 <td>
-    <span class="badge bg-warning text-dark">Passed</span>
+    <span class="badge bg-success text-light">Passed</span>
 </td>
 
 <td>
-    <button class="btn btn-sm btn-warning btn-lg" onclick="recallPatient('${queue}')">
+    <button class="btn btn-sm btn-warning btn-lg" onclick="recallPatient('${queue.queue_number}')">
         Recall
     </button>
 </td>

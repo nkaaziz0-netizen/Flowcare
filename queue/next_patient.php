@@ -57,9 +57,11 @@ $current = $conn->query("
 
     $next_id = $nextPatient['id'];
 
+    $doctor_id = $_SESSION['user_id'];
     $conn->query("
         UPDATE patients
-        SET status='serving'
+        SET status='serving',
+            called_by='$doctor_id'
         WHERE id = $next_id
     ");
 

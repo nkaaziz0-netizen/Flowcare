@@ -26,9 +26,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role = $_POST['role'];
+    $location = $_POST['location'];
 
-    $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $username, $password, $role);
+    $stmt = $conn->prepare("INSERT INTO users (username, password, role, location) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $username, $password, $role, $location);
     $stmt->execute();
 
     $success = true;
@@ -96,8 +97,18 @@ body{
 <label class="form-label">Role</label>
 <select name="role" class="form-select">
 <option value="doctor">Doctor</option>
+<option value="admin">Pharmacist</option>
 <option value="admin">Admin</option>
 </select>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Room</label>
+
+<input type="text"
+       name="location"
+       class="form-control"
+       placeholder="Example: Consultation Room 1">
 </div>
 
 <button type="submit" class="btn btn-primary w-100">
