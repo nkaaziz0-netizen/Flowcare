@@ -1,6 +1,18 @@
 <?php
 include("../config/config.php");
 
+/* PREVENT BACK CACHE */
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+/* CHECK LOGIN */
+if(!isset($_SESSION['user_id'])){
+    header("Location: ../authentication/login.php");
+    exit();
+}
+
+
 $id = $_GET['id'];
 
 /* Get patient data */

@@ -2,7 +2,11 @@
 session_start();
 include("../config/config.php");
 
-// ✅ Log logout BEFORE destroying session
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+//Log logout BEFORE destroying session
 if(isset($_SESSION['user_id'])){
 
     $stmt = $conn->prepare("INSERT INTO logs (user_id, username, action) VALUES (?, ?, ?)");

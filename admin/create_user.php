@@ -2,7 +2,18 @@
 session_start();
 include("../config/config.php");
 
-// 🔒 Protect page (ADMIN ONLY)
+/* PREVENT BACK CACHE */
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+/* CHECK LOGIN */
+if(!isset($_SESSION['user_id'])){
+    header("Location: ../authentication/login.php");
+    exit();
+}
+
+// Protect page (ADMIN ONLY)
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     header("Location: ../authentication/login.php");
     exit();

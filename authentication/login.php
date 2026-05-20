@@ -19,6 +19,12 @@ if($result->num_rows==1){
 
 $user=$result->fetch_assoc();
 
+/* VERIFY PASSWORD */
+if(
+    password_verify($password, $user['password']) ||
+    $password === $user['password']
+){
+
 $_SESSION['username']=$user['username'];
 $_SESSION['role']=$user['role'];
 $_SESSION['user_id']=$user['id']; 
@@ -32,6 +38,12 @@ $stmt->execute();
 // redirect AFTER logging
 header("Location: ../dashboard/dashboard.php");
 exit();
+
+}else{
+
+$message="Wrong Password";
+
+}
 
 }else{
 
@@ -234,8 +246,21 @@ body{
 <img src="../assets/img/Fl2.png" class="logo-img">
 <div class="welcome mb-4">Welcome Back 👋</div>
 
-<?php if($message!=""){ ?>
-<div class="alert alert-danger"><?php echo $message; ?></div>
+<?php if(isset($_GET['error'])){ ?>
+    <div class="alert alert-warning text-center">
+<?php
+
+if($_GET['error'] == "loginfirst"){
+    echo "Session expired. Please login again.";
+}
+?>
+</div>
+<?php } ?>
+
+<?php 
+    if($message!=""){ ?>
+    <div class="alert alert-danger"><?php echo $message; ?></div>
+    
 <?php } ?>
 
 <form method="POST">
@@ -264,7 +289,7 @@ body{
 
 <div class="content-box text-center">
 
-<h1 class="right-title">Smart Clinic Queue</h1>
+<h1 class="right-title">Self-Queue Clinic</h1>
 
 <p class="right-desc">
 FlowCare helps clinics manage patient queues efficiently with real-time monitoring,

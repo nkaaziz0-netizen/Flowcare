@@ -2,9 +2,25 @@
 session_start();
 include("../config/config.php");
 
+/* PREVENT BACK CACHE */
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+/* CHECK LOGIN */
+if(!isset($_SESSION['user_id'])){
+    header("Location: ../authentication/login.php?error=loginfirst");
+    exit();
+}
+
 if (!isset($_SESSION['role']) || 
    ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'doctor')) {
-    header("Location: ../login.php");
+    echo "
+    <script>
+        alert('Access denied. Please login first');
+        window.location.href='../authentication/login.php';
+    </script>
+    ";
     exit();
 }
 ?>
@@ -80,8 +96,10 @@ if (!isset($_SESSION['role']) ||
 <?php } ?>
 
 <li class="nav-item">
-<a class="nav-link text-white" href="../authentication/logout.php">
-<i class="bi bi-box-arrow-right"></i> Logout
+<a class="nav-link text-white"
+   href="../authentication/logout.php"
+   onclick="localStorage.clear();sessionStorage.clear();">
+   <i class="bi bi-box-arrow-right"></i> Logout
 </a>
 </li>
 
@@ -420,6 +438,22 @@ loadQueue();
 
 // refresh every 3 seconds
 setInterval(loadQueue,3000);
+
+// prevent back button after logout
+history.pushState(null, null, location.href);
+
+window.onpopstate = function () {
+    history.go(1);
+};
+
+// auto redirect if session expired
+window.addEventListener("pageshow", function (event) {
+
+    if (event.persisted) {
+        window.location.reload();
+    }
+
+});
 
 </script>
 
