@@ -13,7 +13,6 @@ if(!isset($_SESSION['user_id'])){
     exit();
 }
 
-
 $logs = $conn->query("
     SELECT * FROM patient_logs 
     ORDER BY created_at DESC

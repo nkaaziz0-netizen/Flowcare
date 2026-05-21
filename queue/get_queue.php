@@ -5,7 +5,7 @@ $response = [];
 
 // current serving patient
 $serving_query = $conn->query("
-    SELECT patients.queue_number, users.location
+    SELECT patients.queue_number, patients.nickname, users.location
     FROM patients
     LEFT JOIN users ON patients.called_by = users.id
     WHERE patients.status='serving'
